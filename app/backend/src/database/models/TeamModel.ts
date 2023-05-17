@@ -26,5 +26,5 @@ TeamModel.init(
     underscored: true,
   },
 );
-
+//
 export default TeamModel;
