@@ -3,7 +3,11 @@ import db from '.';
 // import OtherModel from './OtherModel';
 
 class UserModel extends Model {
-  // declare <campo>: <tipo>;
+  declare id: number;
+  declare username: string;
+  declare role: string;
+  declare email: string;
+  declare password: string;
 }
 
 UserModel.init({
