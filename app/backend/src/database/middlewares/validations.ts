@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { validateToken } from '../utils/token';
+import MatchModel from '../models/MatchModel';
 
 const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
@@ -26,4 +27,21 @@ export const tokenValidation = (req: Request, res: Response, next: NextFunction)
   } catch (error) {
     return res.status(401).json({ message: 'Token must be a valid token' });
   }
+};
+
+export const matchesValidation = async (req: Request, res: Response, next: NextFunction) => {
+  const { body: { homeTeamId, awayTeamId } } = req;
+  const home = await MatchModel.findByPk(homeTeamId);
+  const away = await MatchModel.findByPk(awayTeamId);
+  if (homeTeamId === awayTeamId) {
+    return res.status(422).json({
+      message: 'It is not possible to create a match with two equal teams',
+    });
+  }
+  if (!home || !away) {
+    return res.status(404).json({
+      message: 'There is no team with such id!',
+    });
+  }
+  next();
 };

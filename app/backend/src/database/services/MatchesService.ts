@@ -29,6 +29,39 @@ class MatchesService {
     }
     return result;
   }
+
+  async finished(id: number): Promise<void> {
+    const result = await this.model.findByPk(id);
+    await result?.update({ inProgress: false });
+  }
+
+  async updated(
+    id: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<void> {
+    const result = await this.model.findByPk(id);
+    await result?.update({
+      homeTeamGoals,
+      awayTeamGoals,
+    });
+  }
+
+  async inserted(
+    homeTeamId: number,
+    awayTeamId: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<Match> {
+    const result = await this.model.create({
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+      inProgress: true,
+    });
+    return result;
+  }
 }
 
 export default MatchesService;
